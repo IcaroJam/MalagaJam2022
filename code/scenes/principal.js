@@ -2,45 +2,44 @@ class Principal extends Phaser.Scene {
 
     constructor(cursors, player) {
         super();
-
         this.cursors = cursors;
         this.player = player;
     }
 
     preload() {
-
-        this.load.image('tiles', 'assets/sheet_7.png');
-        this.load.spritesheet("characters", "assets/characters.png", { frameWidth: 32, frameHeight: 32 });
-        // Load the export Tiled JSON
-        this.load.tilemapTiledJSON('map', 'assets/mapa.json');
+        this.load.image('tiles', 'assets/Untitled.png');
+        this.load.spritesheet("characters", "assets/zombie.png", { frameWidth: 64, frameHeight: 128 });
+        this.load.tilemapTiledJSON('map', 'assets/prueba_jam2.json');
     }
 
     create() {
-        // 1st run to set everything in place
+        //this.cameras.main.zoom = 1
+        const zoom = 2;
         this.cursors = this.input.keyboard.createCursorKeys();
-        this.cameras.main.setBounds(0, 0, 800 * 2, 600 * 2);
-        this.physics.world.setBounds(0, 0, 800 * 2, 600 * 2);
+        this.cameras.main.setBounds(0, 0, 1280 * zoom, 1024 * zoom);
+        this.physics.world.setBounds(0, 0, 1280 * zoom, 1024 * zoom);
 
         const map = this.make.tilemap({ key: 'map' })
-        const tileset = map.addTilesetImage('platformer', 'tiles');
+        const tileset = map.addTilesetImage('terreno_nivel1', 'tiles');
 
-        const platforms = map.createLayer('platforms', tileset, 0, 0);
-        const water = map.createLayer('water', tileset, 0, 0);
+        const platforms = map.createLayer('terreno', tileset, 0, 800);
+        
+        //const water = map.createLayer('water', tileset, 0, 0);
 
         platforms.setCollisionByExclusion(-1, true);
-        platforms.setScale(2);
-        water.setScale(2);
+        platforms.setScale(1);
+        //water.setScale(2);
 
         this.player = this.physics.add.sprite(100, 800, 'characters');
         this.player.setBounce(0.1);
         this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.player, platforms);
         this.player.body.setGravityY(150)
-        this.player.setScale(2);
+        this.player.setScale(1);
 
         this.anims.create({
             key: 'walk',
-            frames: this.anims.generateFrameNumbers('characters', { start: 0, end: 4 }),
+            frames: this.anims.generateFrameNumbers('characters', { start: 0, end: 2 }),
             frameRate: 5,
             repeat: -1
         });
@@ -49,7 +48,6 @@ class Principal extends Phaser.Scene {
     }
 
     update() {
-        // Function used to update game assets like our character or to read the pressed keys
         this.player.anims.play('walk', true);
         const velocity = 200
 

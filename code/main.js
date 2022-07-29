@@ -3,9 +3,16 @@ import Principal from "./scenes/principal.js";
 var config = {
     type: Phaser.AUTO,
     parent: 'canvas',
-    width: 800,
-    height: 600,
+    width: 1280,
+    height: 1024,
     scene: Principal,
+    scale: {
+        mode: Phaser.Scale.FIT,
+        parent: 'phaser-example',
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        width: 1280,
+        height: 1024
+    },
     physics: {
         default: "arcade"
     },
