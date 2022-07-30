@@ -8,7 +8,7 @@ var config = {
     scene: Principal,
     scale: {
         mode: Phaser.Scale.FIT,
-        parent: 'phaser-example',
+        parent: 'canvas',
         autoCenter: Phaser.Scale.CENTER_BOTH,
         width: 1280,
         height: 1024

@@ -7,36 +7,54 @@ class Principal extends Phaser.Scene {
     }
 
     preload() {
+        // Tileset inicial de Nestor
         this.load.image('tiles', 'assets/Untitled.png');
+        // Tileset de prueba
         this.load.spritesheet("characters", "assets/zombie.png", { frameWidth: 64, frameHeight: 128 });
+        // Mapa en formato JSON creado con Tiled
         this.load.tilemapTiledJSON('map', 'assets/prueba_jam2.json');
+        // Fondos
+        this.load.image('fondo', 'assets/StaticBG1.png');
+        this.load.image('montana', 'assets/DynamicBG1.png');
     }
 
     create() {
-        //this.cameras.main.zoom = 1
-        const zoom = 2;
+        // Asignacion de los cursores direccion
         this.cursors = this.input.keyboard.createCursorKeys();
+
+        const zoom = 2;
+        // Reajuste de las camaras y el mundo para el zoom * 2
         this.cameras.main.setBounds(0, 0, 1280 * zoom, 1024 * zoom);
         this.physics.world.setBounds(0, 0, 1280 * zoom, 1024 * zoom);
 
+        this.add.image(1000, 1000, 'fondo').setScale(4);
+        this.add.image(1000, 1500, 'montana').setScale(2);
+
+        // NOTA: Las llaves terreno_nivel1 (tileset) y terreno (layer) seasignan en Tiled
+        // Creamos el mapa a traves del objeto de la configuración
         const map = this.make.tilemap({ key: 'map' })
+
+        // Le asignamos su tileset para que lo pueda dibujar
         const tileset = map.addTilesetImage('terreno_nivel1', 'tiles');
 
+        // Creamos una capa cargada desde la config del map
         const platforms = map.createLayer('terreno', tileset, 0, 800);
-        
-        //const water = map.createLayer('water', tileset, 0, 0);
-
-        platforms.setCollisionByExclusion(-1, true);
         platforms.setScale(1);
-        //water.setScale(2);
 
+        // Importante para la colision
+        platforms.setCollisionByExclusion(-1, true);
+
+        // Añadimos al jugador
         this.player = this.physics.add.sprite(100, 800, 'characters');
         this.player.setBounce(0.1);
-        this.player.setCollideWorldBounds(true);
-        this.physics.add.collider(this.player, platforms);
         this.player.body.setGravityY(150)
         this.player.setScale(1);
 
+        // Colisiones del jugador
+        this.player.setCollideWorldBounds(true);
+        this.physics.add.collider(this.player, platforms);
+
+        // Animación para andar
         this.anims.create({
             key: 'walk',
             frames: this.anims.generateFrameNumbers('characters', { start: 0, end: 2 }),
@@ -44,29 +62,25 @@ class Principal extends Phaser.Scene {
             repeat: -1
         });
 
+        // La camera sigue al jugador
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
     }
 
     update() {
-        this.player.anims.play('walk', true);
         const velocity = 200
-
         if (this.cursors.left.isDown) {
             this.player.setVelocityX(-240);
-        
             this.player.anims.play('walk', true);
         }
         else if (this.cursors.right.isDown) {
             this.player.setVelocityX(240);
-        
             this.player.anims.play('walk', true);
         }
         else {
             this.player.setVelocityX(0);
-        
             this.player.anims.stop('walk');
         }
-        
+
         if (this.cursors.up.isDown && this.player.body.onFloor()) {
             this.player.setVelocityY(-330);
         }
