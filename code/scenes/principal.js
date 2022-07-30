@@ -13,6 +13,7 @@ class Principal extends Phaser.Scene {
         this.load.image('tiles', 'assets/Untitled.png');
         // Tileset de prueba
         this.load.spritesheet("characters", "assets/main_walking.png", { frameWidth: 128, frameHeight: 128 });
+        this.load.spritesheet("jump", "assets/main_jumping.png", { frameWidth: 128, frameHeight: 128 });
         // Mapa en formato JSON creado con Tiled
         this.load.tilemapTiledJSON('map', 'assets/nivel1.json');
         // Fondos
@@ -75,14 +76,21 @@ class Principal extends Phaser.Scene {
             repeat: -1
         });
 
+        this.anims.create({
+            key: 'jump',
+            frames: this.anims.generateFrameNumbers('jump', { start: 3, end: 3}),
+            frameRate: 10,
+            repeat: 0
+        });
+
         // La camera sigue al jugador
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
     }
 
     update() {
-        if (this.sound.context.state === 'suspended') {
+        /*if (this.sound.context.state === 'suspended') {
             this.sound.context.resume();
-        }
+        }*/
         const velocity = 300;
 
         if (this.cursors.left.isDown) {
@@ -93,7 +101,7 @@ class Principal extends Phaser.Scene {
         else if (this.cursors.right.isDown) {
             this.player.setVelocityX(velocity);
             this.player.anims.play('walk', true);
-            gameState.walking = true
+            //gameState.walking = true
         }
         else {
             this.player.setVelocityX(0);
@@ -104,6 +112,10 @@ class Principal extends Phaser.Scene {
 
         if (this.cursors.up.isDown && this.player.body.onFloor()) {
             this.player.setVelocityY(-300);
+        }
+
+        if (this.cursors.up.isDown){
+            this.player.anims.play('jump');
         }
 
         if (this.player.y < 1650) {
