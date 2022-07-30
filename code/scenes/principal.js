@@ -44,8 +44,11 @@ class Principal extends Phaser.Scene {
         gameState.sfx = {};
         gameState.sfx.steps = this.sound.add('steps', { loop: true });
 
-        this.add.image(1000, 1000, 'fondo').setScale(4);
-        this.add.image(1000, 1500, 'montana').setScale(2);
+        this.add.image(0, 720, 'mountains3').setOrigin(0, 1).setScrollFactor(0.1);
+        this.add.image(0, 900, 'mountains2').setOrigin(0, 0.8).setScrollFactor(0.2);
+        this.add.image(0, 1080, 'mountains1').setOrigin(0, 0.6).setScrollFactor(0.4);
+        this.add.image(0, 1180, 'trees2').setOrigin(0, 0.4).setScrollFactor(0.6);
+        this.add.image(0, 1520, 'trees1').setOrigin(0, 0.2).setScrollFactor(1);
 
         // NOTA: Las llaves terreno_nivel1 (tileset) y terreno (layer) seasignan en Tiled
         // Creamos el mapa a traves del objeto de la configuración
