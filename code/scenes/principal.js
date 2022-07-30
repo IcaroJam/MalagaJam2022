@@ -94,13 +94,6 @@ class Principal extends Phaser.Scene {
             repeat: -1
         });
 
-        this.anims.create({
-            key: 'die',
-            frames: this.anims.generateFrameNumbers('char_dying', { start: 0, end: 2 }),
-            frameRate: 10,
-            repeat: -1
-        });
-
         // La camera sigue al jugador
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
     }
@@ -129,14 +122,6 @@ class Principal extends Phaser.Scene {
         this.bat.anims.play('fly', true);
 
         this.fogFollows();
-
-        this.physics.collide(
-            this.player,
-            this.fog,
-            this.isDead(),
-            null,
-            this
-          );
     }
 
     addEvents() {
@@ -157,13 +142,6 @@ class Principal extends Phaser.Scene {
         //this.physics.
     }
 
-    isDead() {
-        console.log("You died!");
-        //this.player.alive = false;
-        //this.player.body.velocity.setTo(0,0);
-        //this.player.anims.stop();
-        //this.player.anims.play('die');
-    }
 }
 
 export default Principal;
@@ -217,6 +195,5 @@ class Laser extends Phaser.Physics.Arcade.Sprite {
 		this.setVelocityX(900);
 	}
 }
-
 
 
