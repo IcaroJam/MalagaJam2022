@@ -16,7 +16,10 @@ var config = {
     physics: {
         default: "arcade"
     },
-    pixelArt: true
+    pixelArt: true,
+    audio: {
+        disableWebAudio: true
+    }
 };
 
 var game = new Phaser.Game(config);

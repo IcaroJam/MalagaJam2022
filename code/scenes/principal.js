@@ -1,6 +1,8 @@
+var gameState = {};
+
 class Principal extends Phaser.Scene {
 
-    constructor(cursors, player) {
+    constructor(cursors, player, steps) {
         super();
         this.cursors = cursors;
         this.player = player;
@@ -16,6 +18,11 @@ class Principal extends Phaser.Scene {
         // Fondos
         this.load.image('fondo', 'assets/StaticBG1.png');
         this.load.image('montana', 'assets/DynamicBG1.png');
+
+        // Sounds
+        this.load.audio('steps', [
+            'assets/audio/steps-003.ogg',
+        ]);
     }
 
     create() {
@@ -26,6 +33,12 @@ class Principal extends Phaser.Scene {
         // Reajuste de las camaras y el mundo para el zoom * 2
         this.cameras.main.setBounds(0, 0, 1280 * zoom, 1024 * zoom);
         this.physics.world.setBounds(0, 0, 1280 * zoom, 1024 * zoom);
+
+        gameState.walking = false;
+
+        // Sound
+        gameState.sfx = {};
+        gameState.sfx.steps = this.sound.add('steps', { loop: true });
 
         this.add.image(1000, 1000, 'fondo').setScale(4);
         this.add.image(1000, 1500, 'montana').setScale(2);
@@ -67,18 +80,26 @@ class Principal extends Phaser.Scene {
     }
 
     update() {
+        if (this.sound.context.state === 'suspended') {
+            this.sound.context.resume();
+        }
         const velocity = 300;
+
         if (this.cursors.left.isDown) {
             this.player.setVelocityX(-velocity);
             this.player.anims.play('walk', true);
+            gameState.walking = true
         }
         else if (this.cursors.right.isDown) {
             this.player.setVelocityX(velocity);
             this.player.anims.play('walk', true);
+            gameState.walking = true
         }
         else {
             this.player.setVelocityX(0);
             this.player.anims.stop('walk');
+            gameState.walking = false;
+            gameState.sfx.steps.stop();
         }
 
         if (this.cursors.up.isDown && this.player.body.onFloor()) {
@@ -87,6 +108,14 @@ class Principal extends Phaser.Scene {
 
         if (this.player.y < 1650) {
             this.player.setVelocityY(250);
+        }
+
+        if (gameState.walking && !gameState.sfx.steps.isPlaying && this.player.body.onFloor()) {
+            gameState.sfx.steps.play();
+        }
+
+        if(!this.player.body.onFloor()){
+            gameState.sfx.steps.stop();
         }
     }
 }
