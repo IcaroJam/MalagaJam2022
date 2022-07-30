@@ -26,44 +26,13 @@ var Preloader = new Phaser.Class({
 
 });
 
-var MainMenu = new Phaser.Class({
-
-    Extends: Phaser.Scene,
-
-    initialize:
-
-    function MainMenu ()
-    {
-        Phaser.Scene.call(this, { key: 'mainmenu' });
-        window.MENU = this;
-    },
-
-    create: function ()
-    {
-        console.log('%c MainMenu ', 'background: green; color: white; display: block;');
-
-        var bg = this.add.image(0, 0, 'btStart');
-
-        //var container = this.add.container(100, 200, [ bg]);
-
-        bg.setInteractive();
-
-        bg.once('pointerup', function () {
-
-            this.scene.start('principal');
-
-        }, this);
-    }
-
-});
-
 var config = {
     type: Phaser.AUTO,
     parent: 'canvas',
     width: 1280,
     height: 1024,
     backgroundColor: '#202426',
-    scene: [ Preloader, MainMenu, Principal ],
+    scene: [ Principal ],
     scale: {
         mode: Phaser.Scale.FIT,
         parent: 'canvas',

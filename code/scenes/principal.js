@@ -17,8 +17,12 @@ class Principal extends Phaser.Scene {
         // Mapa en formato JSON creado con Tiled
         this.load.tilemapTiledJSON('map', 'assets/nivel1.json');
         // Fondos
-        this.load.image('fondo', 'assets/StaticBG1.png');
-        this.load.image('montana', 'assets/DynamicBG1.png');
+        this.load.image('mountains3', 'assets/Plane3Mountains.png');
+        this.load.image('mountains2', 'assets/Plane2Mountains.png');
+        this.load.image('mountains1', 'assets/Plane1Mountains.png');
+        this.load.image('trees2', 'assets/Plane2Trees.png');
+        this.load.image('trees1', 'assets/Plane1Trees.png');
+        this.load.image('vignette', 'assets/Vignette.png');
 
         //Laser
         this.load.image('laser', "assets/laser.png");
@@ -49,6 +53,7 @@ class Principal extends Phaser.Scene {
         this.add.image(0, 1080, 'mountains1').setOrigin(0, 0.6).setScrollFactor(0.4);
         this.add.image(0, 1180, 'trees2').setOrigin(0, 0.4).setScrollFactor(0.6);
         this.add.image(0, 1520, 'trees1').setOrigin(0, 0.2).setScrollFactor(1);
+        
 
         // NOTA: Las llaves terreno_nivel1 (tileset) y terreno (layer) seasignan en Tiled
         // Creamos el mapa a traves del objeto de la configuración
@@ -92,6 +97,10 @@ class Principal extends Phaser.Scene {
             frameRate: 10,
             repeat: 0
         });
+
+        var vign = this.add.image(0, 0, 'vignette').setOrigin(0, 0).setScrollFactor(0);
+
+        vign.alpha = 0.5;
 
         // La camera sigue al jugador
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
