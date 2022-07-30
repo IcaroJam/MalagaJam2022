@@ -134,16 +134,6 @@ class Principal extends Phaser.Scene {
             this.player.anims.play('jump');
         }
 
-        // Cae de forma pesada desde la plataformas
-        if (this.player.body.velocity.y > 100) {
-            // console.log("me caigo");
-            // this.player.setVelocityY(600);
-        }
-
-        // if (this.player.y < 1450) {
-        //     this.player.setVelocityY(600);
-        // }
-
         if (gameState.walking && !gameState.sfx.steps.isPlaying && this.player.body.onFloor()) {
             gameState.sfx.steps.play();
         }
