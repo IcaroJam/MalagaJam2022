@@ -14,7 +14,7 @@ class Principal extends Phaser.Scene {
         // Tileset inicial de Nestor
         this.load.image('tiles', 'assets/Untitled.png');
         // Tileset de prueba
-        this.load.spritesheet("characters", "assets/zombie.png", { frameWidth: 64, frameHeight: 128 });
+        this.load.spritesheet("characters", "assets/main_walking.png", { frameWidth: 128, frameHeight: 128 });
         // Mapa en formato JSON creado con Tiled
         this.load.tilemapTiledJSON('map', 'assets/prueba_jam2.json');
         // Fondos
@@ -23,6 +23,7 @@ class Principal extends Phaser.Scene {
         this.load.image('laser', "assets/fire.png");
         this.load.spritesheet("fog", "assets/bat.png",{ frameWidth: 128, frameHeight: 128 });
         this.load.spritesheet("bat", "assets/bat.png",{ frameWidth: 128, frameHeight: 128 });
+        this.load.spritesheet("char_dying", "assets/main_dying.png",{ frameWidth: 128, frameHeight: 128 });
     }
 
     create() {
@@ -54,9 +55,9 @@ class Principal extends Phaser.Scene {
         platforms.setCollisionByExclusion(-1, true);
 
         // Añadimos al jugador
-        this.player = this.physics.add.sprite(100, 900, 'characters');
+        this.player = this.physics.add.sprite(100, 1500, 'characters', 5).setSize(50, 128);
         this.player.setBounce(0.1);
-        this.player.body.setGravityY(200);
+        this.player.body.setGravityY(300);
         this.player.setScale(1);
 
         this.laserGroup = new LaserGroup(this);
@@ -64,7 +65,7 @@ class Principal extends Phaser.Scene {
 
         //Añadimos la neblina
         this.fog = this.physics.add.sprite(90, 700, 'fog');
-        this.fog.body.setGravityY(200);
+        this.fog.body.setGravityY(100);
 
         //Añadimos el murciélago
         this.bat = this.physics.add.sprite(900, 700, 'fog');
@@ -81,8 +82,8 @@ class Principal extends Phaser.Scene {
         // Animación para andar
         this.anims.create({
             key: 'walk',
-            frames: this.anims.generateFrameNumbers('characters', { start: 0, end: 2 }),
-            frameRate: 5,
+            frames: this.anims.generateFrameNumbers('characters', { start: 0, end: 5 }),
+            frameRate: 10,
             repeat: -1
         });
 
@@ -93,12 +94,20 @@ class Principal extends Phaser.Scene {
             repeat: -1
         });
 
+        this.anims.create({
+            key: 'die',
+            frames: this.anims.generateFrameNumbers('char_dying', { start: 0, end: 2 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
         // La camera sigue al jugador
         this.cameras.main.startFollow(this.player, true, 0.05, 0.05);
     }
 
     update() {
         const velocity = 200
+
         if (this.cursors.left.isDown) {
             this.player.setVelocityX(-240);
             this.player.anims.play('walk', true);
@@ -120,7 +129,14 @@ class Principal extends Phaser.Scene {
         this.bat.anims.play('fly', true);
 
         this.fogFollows();
-        //this.movesUpDown();
+
+        this.physics.collide(
+            this.player,
+            this.fog,
+            this.isDead(),
+            null,
+            this
+          );
     }
 
     addEvents() {
@@ -134,11 +150,19 @@ class Principal extends Phaser.Scene {
     }
 
     fogFollows () {
-        this.physics.moveToObject(this.fog, this.player, 250);
+        this.physics.moveToObject(this.fog, this.player, 150);
     }
 
     movesUpDown () {
         //this.physics.
+    }
+
+    isDead() {
+        console.log("You died!");
+        //this.player.alive = false;
+        //this.player.body.velocity.setTo(0,0);
+        //this.player.anims.stop();
+        //this.player.anims.play('die');
     }
 }
 
