@@ -1,3 +1,4 @@
+
 class Principal extends Phaser.Scene {
 
     constructor(cursors, player) {
@@ -5,6 +6,7 @@ class Principal extends Phaser.Scene {
         this.cursors = cursors;
         this.player = player;
         this.laserGroup;
+        this.fog;
     }
 
     preload() {
@@ -17,7 +19,8 @@ class Principal extends Phaser.Scene {
         // Fondos
         this.load.image('fondo', 'assets/StaticBG1.png');
         this.load.image('montana', 'assets/DynamicBG1.png');
-        this.load.image('laser', "assets/fire.png")
+        this.load.image('laser', "assets/fire.png");
+        this.load.spritesheet("fog", "assets/bat.png",{ frameWidth: 128, frameHeight: 128 });
     }
 
     create() {
@@ -36,6 +39,8 @@ class Principal extends Phaser.Scene {
         // Creamos el mapa a traves del objeto de la configuración
         const map = this.make.tilemap({ key: 'map' })
 
+        
+
         // Le asignamos su tileset para que lo pueda dibujar
         const tileset = map.addTilesetImage('terreno_nivel1', 'tiles');
 
@@ -49,11 +54,15 @@ class Principal extends Phaser.Scene {
         // Añadimos al jugador
         this.player = this.physics.add.sprite(100, 800, 'characters');
         this.player.setBounce(0.1);
-        this.player.body.setGravityY(150)
+        this.player.body.setGravityY(200);
         this.player.setScale(1);
 
         this.laserGroup = new LaserGroup(this);
 		this.addEvents();
+
+        //Añadimos enemigo
+        this.fog = this.physics.add.sprite(90, 700, 'fog');
+        this.fog.body.setGravityY(100);
 
         // Colisiones del jugador
         this.player.setCollideWorldBounds(true);
@@ -63,6 +72,13 @@ class Principal extends Phaser.Scene {
         this.anims.create({
             key: 'walk',
             frames: this.anims.generateFrameNumbers('characters', { start: 0, end: 2 }),
+            frameRate: 5,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'fly',
+            frames: this.anims.generateFrameNumbers('fog', { start: 0, end: 2 }),
             frameRate: 5,
             repeat: -1
         });
@@ -89,6 +105,10 @@ class Principal extends Phaser.Scene {
         if (this.cursors.up.isDown && this.player.body.onFloor()) {
             this.player.setVelocityY(-330);
         }
+
+        this.fog.anims.play('fly', true);
+
+        this.fogFollows();
     }
 
     addEvents() {
@@ -99,6 +119,10 @@ class Principal extends Phaser.Scene {
 
     shootLaser() {
         this.laserGroup.fireLaser(this.player.x, this.player.y - 20);
+    }
+
+    fogFollows () {
+        this.physics.moveToObject(this.fog, this.player, 100);
     }
 }
 
@@ -153,3 +177,4 @@ class Laser extends Phaser.Physics.Arcade.Sprite {
 		this.setVelocityX(900);
 	}
 }
+
