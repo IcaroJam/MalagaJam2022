@@ -43,12 +43,7 @@ class Principal extends Phaser.Scene {
         gameState.sfx = {};
         gameState.sfx.steps = this.sound.add('steps', { loop: true });
 
-        this.mountainsBack = this.add.tileSprite(0,
-            this.height,
-            this.width,
-            this.cache.getImage('mountains3').height,
-            'mountains3'
-        );
+        this.add.image(1280, 1080, 'mountains3').setScrollFactor(0.25);
 
         // Unused?
         //this.add.image(1000, 1000, 'fondo').setScale(4);
