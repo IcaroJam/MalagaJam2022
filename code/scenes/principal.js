@@ -3,14 +3,14 @@ var gameState = {};
 class Principal extends Phaser.Scene {
 
     constructor(cursors, player, steps) {
-        super();
+        super({key:"principal"});
         this.cursors = cursors;
         this.player = player;
     }
 
     preload() {
         // Tileset inicial de Nestor
-        this.load.image('tiles', 'assets/Untitled.png');
+        this.load.image('tiles', 'assets/BaseTileMap.png');
         // Tileset de prueba
         this.load.spritesheet("characters", "assets/main_walking.png", { frameWidth: 128, frameHeight: 128 });
         this.load.spritesheet("jump", "assets/main_jumping.png", { frameWidth: 128, frameHeight: 128 });
@@ -19,6 +19,9 @@ class Principal extends Phaser.Scene {
         // Fondos
         this.load.image('fondo', 'assets/StaticBG1.png');
         this.load.image('montana', 'assets/DynamicBG1.png');
+
+        //Laser
+        this.load.image('laser', "assets/laser.png");
 
         // Sounds
         this.load.audio('steps', [
@@ -32,8 +35,8 @@ class Principal extends Phaser.Scene {
 
         const zoom = 2;
         // Reajuste de las camaras y el mundo para el zoom * 2
-        this.cameras.main.setBounds(0, 0, 1280 * zoom, 1024 * zoom);
-        this.physics.world.setBounds(0, 0, 1280 * zoom, 1024 * zoom);
+        this.cameras.main.setBounds(0, 0, 7680 * zoom, 1024 * zoom);
+        this.physics.world.setBounds(0, 0, 7680 * zoom, 1024 * zoom);
 
         gameState.walking = false;
 
@@ -68,6 +71,10 @@ class Principal extends Phaser.Scene {
         this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.player, platforms);
 
+        // Laser
+        this.laserGroup = new LaserGroup(this);
+		this.addEvents();
+
         // Animación para andar
         this.anims.create({
             key: 'walk',
@@ -88,11 +95,7 @@ class Principal extends Phaser.Scene {
     }
 
     update() {
-        /*if (this.sound.context.state === 'suspended') {
-            this.sound.context.resume();
-        }*/
         const velocity = 300;
-
         if (this.cursors.left.isDown) {
             this.player.setVelocityX(-velocity);
             this.player.anims.play('walk', true);
@@ -101,7 +104,7 @@ class Principal extends Phaser.Scene {
         else if (this.cursors.right.isDown) {
             this.player.setVelocityX(velocity);
             this.player.anims.play('walk', true);
-            //gameState.walking = true
+            gameState.walking = true
         }
         else {
             this.player.setVelocityX(0);
@@ -111,15 +114,21 @@ class Principal extends Phaser.Scene {
         }
 
         if (this.cursors.up.isDown && this.player.body.onFloor()) {
-            this.player.setVelocityY(-300);
+            this.player.setVelocityY(-600);
         }
 
         if (this.cursors.up.isDown){
             this.player.anims.play('jump');
         }
 
-        if (this.player.y < 1650) {
-            this.player.setVelocityY(250);
+        // Cae de forma pesada desde la plataformas
+        if (this.player.body.velocity.y > -100) {
+            console.log("me caigo");
+            this.player.setVelocityY(600);
+        }
+
+        if (this.player.y < 1450) {
+            this.player.setVelocityY(600);
         }
 
         if (gameState.walking && !gameState.sfx.steps.isPlaying && this.player.body.onFloor()) {
@@ -130,6 +139,66 @@ class Principal extends Phaser.Scene {
             gameState.sfx.steps.stop();
         }
     }
+
+    addEvents() {
+	    this.input.on('pointerdown', pointer => {
+            this.shootLaser();
+        });
+    }
+
+    shootLaser() {
+        this.laserGroup.fireLaser(this.player.x, this.player.y - 20);
+    }
 }
 
 export default Principal;
+
+class LaserGroup extends Phaser.Physics.Arcade.Group
+{
+	constructor(scene) {
+		// Call the super constructor, passing in a world and a scene
+		super(scene.physics.world, scene);
+
+		// Initialize the group
+		this.createMultiple({
+			classType: Laser, // This is the class we create just below
+			frameQuantity: 30, // Create 30 instances in the pool
+			active: false,
+			visible: false,
+			key: 'laser'
+		})
+	}
+
+    fireLaser(x, y) {
+		// Get the first available sprite in the group
+		const laser = this.getFirstDead(false);
+		if (laser) {
+			laser.fire(x, y);
+		}
+	}
+
+}
+
+class Laser extends Phaser.Physics.Arcade.Sprite {
+	constructor(scene, x, y) {
+		super(scene, x, y, 'laser');
+	}
+
+    preUpdate(time, delta) {
+		super.preUpdate(time, delta);
+ 
+		if (this.x <= 0) {
+			this.setActive(false);
+			this.setVisible(false);
+		}
+	}
+
+    fire(x, y) {
+		this.body.reset(x, y);
+ 
+		this.setActive(true);
+		this.setVisible(true);
+ 
+		this.setVelocityX(900);
+	}
+}
