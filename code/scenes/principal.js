@@ -43,7 +43,11 @@ class Principal extends Phaser.Scene {
         gameState.sfx = {};
         gameState.sfx.steps = this.sound.add('steps', { loop: true });
 
-        this.add.image(1280, 1080, 'mountains3').setScrollFactor(0.25);
+        this.add.image(1280, 1080, 'mountains3').setOrigin(0, 0.4).setScrollFactor(0.1);
+        this.add.image(1280, 1080, 'mountains2').setOrigin(0, 0.5).setScrollFactor(0.2);
+        this.add.image(1280, 1080, 'mountains1').setOrigin(0, 0.6).setScrollFactor(0.3);
+        this.add.image(1280, 1080, 'trees2').setOrigin(0, 0.65).setScrollFactor(0.6);
+        this.add.image(1280, 1080, 'trees1').setOrigin(0, 0.9).setScrollFactor(1);
 
         // Unused?
         //this.add.image(1000, 1000, 'fondo').setScale(4);
@@ -86,9 +90,9 @@ class Principal extends Phaser.Scene {
     }
 
     update() {
-        if (this.sound.context.state === 'suspended') {
+        /*if (this.sound.context.state === 'suspended') {
             this.sound.context.resume();
-        }
+        }*/
         const velocity = 300;
 
         if (this.cursors.left.isDown) {
