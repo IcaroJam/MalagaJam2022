@@ -2,11 +2,12 @@
 class Principal extends Phaser.Scene {
 
     constructor(cursors, player) {
-        super();
+        super({key: "principal"});
         this.cursors = cursors;
         this.player = player;
         this.laserGroup;
         this.fog;
+        this.bat;
     }
 
     preload() {
@@ -21,6 +22,7 @@ class Principal extends Phaser.Scene {
         this.load.image('montana', 'assets/DynamicBG1.png');
         this.load.image('laser', "assets/fire.png");
         this.load.spritesheet("fog", "assets/bat.png",{ frameWidth: 128, frameHeight: 128 });
+        this.load.spritesheet("bat", "assets/bat.png",{ frameWidth: 128, frameHeight: 128 });
     }
 
     create() {
@@ -52,7 +54,7 @@ class Principal extends Phaser.Scene {
         platforms.setCollisionByExclusion(-1, true);
 
         // Añadimos al jugador
-        this.player = this.physics.add.sprite(100, 800, 'characters');
+        this.player = this.physics.add.sprite(100, 900, 'characters');
         this.player.setBounce(0.1);
         this.player.body.setGravityY(200);
         this.player.setScale(1);
@@ -60,13 +62,21 @@ class Principal extends Phaser.Scene {
         this.laserGroup = new LaserGroup(this);
 		this.addEvents();
 
-        //Añadimos enemigo
+        //Añadimos la neblina
         this.fog = this.physics.add.sprite(90, 700, 'fog');
-        this.fog.body.setGravityY(100);
+        this.fog.body.setGravityY(200);
+
+        //Añadimos el murciélago
+        this.bat = this.physics.add.sprite(900, 700, 'fog');
+        this.bat.body.setGravityY(100);
 
         // Colisiones del jugador
         this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.player, platforms);
+
+        //Colisiones del murciélago
+        this.bat.setCollideWorldBounds(true);
+        this.physics.add.collider(this.bat, platforms);
 
         // Animación para andar
         this.anims.create({
@@ -78,7 +88,7 @@ class Principal extends Phaser.Scene {
 
         this.anims.create({
             key: 'fly',
-            frames: this.anims.generateFrameNumbers('fog', { start: 0, end: 2 }),
+            frames: this.anims.generateFrameNumbers('bat', { start: 0, end: 2 }),
             frameRate: 5,
             repeat: -1
         });
@@ -107,8 +117,10 @@ class Principal extends Phaser.Scene {
         }
 
         this.fog.anims.play('fly', true);
+        this.bat.anims.play('fly', true);
 
         this.fogFollows();
+        //this.movesUpDown();
     }
 
     addEvents() {
@@ -122,7 +134,11 @@ class Principal extends Phaser.Scene {
     }
 
     fogFollows () {
-        this.physics.moveToObject(this.fog, this.player, 100);
+        this.physics.moveToObject(this.fog, this.player, 250);
+    }
+
+    movesUpDown () {
+        //this.physics.
     }
 }
 
@@ -177,4 +193,6 @@ class Laser extends Phaser.Physics.Arcade.Sprite {
 		this.setVelocityX(900);
 	}
 }
+
+
 
