@@ -5,6 +5,7 @@ var config = {
     parent: 'canvas',
     width: 1280,
     height: 1024,
+    backgroundColor: '#202426',
     scene: Principal,
     scale: {
         mode: Phaser.Scale.FIT,
