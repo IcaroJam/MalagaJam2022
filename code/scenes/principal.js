@@ -98,8 +98,8 @@ class Principal extends Phaser.Scene {
             repeat: 0
         });
 
+        // Vignette setup.
         var vign = this.add.image(0, 0, 'vignette').setOrigin(0, 0).setScrollFactor(0);
-
         vign.alpha = 0.5;
 
         // La camera sigue al jugador
@@ -107,6 +107,7 @@ class Principal extends Phaser.Scene {
     }
 
     update() {
+        console.log(this.player.body.velocity.y)
         const velocity = 300;
         if (this.cursors.left.isDown) {
             this.player.setVelocityX(-velocity);
@@ -134,14 +135,14 @@ class Principal extends Phaser.Scene {
         }
 
         // Cae de forma pesada desde la plataformas
-        if (this.player.body.velocity.y > -100) {
-            console.log("me caigo");
-            this.player.setVelocityY(600);
+        if (this.player.body.velocity.y > 100) {
+            // console.log("me caigo");
+            // this.player.setVelocityY(600);
         }
 
-        if (this.player.y < 1450) {
-            this.player.setVelocityY(600);
-        }
+        // if (this.player.y < 1450) {
+        //     this.player.setVelocityY(600);
+        // }
 
         if (gameState.walking && !gameState.sfx.steps.isPlaying && this.player.body.onFloor()) {
             gameState.sfx.steps.play();
