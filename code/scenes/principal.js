@@ -16,8 +16,11 @@ class Principal extends Phaser.Scene {
         // Mapa en formato JSON creado con Tiled
         this.load.tilemapTiledJSON('map', 'assets/nivel1.json');
         // Fondos
-        this.load.image('fondo', 'assets/StaticBG1.png');
-        this.load.image('montana', 'assets/DynamicBG1.png');
+        this.load.image('mountains3', 'assets/Plane3Mountains.png');
+        this.load.image('mountains2', 'assets/Plane2Mountains.png');
+        this.load.image('mountains1', 'assets/Plane1Mountains.png');
+        this.load.image('trees2', 'assets/Plane2Trees.png');
+        this.load.image('trees1', 'assets/Plane1Trees.png');
 
         // Sounds
         this.load.audio('steps', [
@@ -40,8 +43,16 @@ class Principal extends Phaser.Scene {
         gameState.sfx = {};
         gameState.sfx.steps = this.sound.add('steps', { loop: true });
 
-        this.add.image(1000, 1000, 'fondo').setScale(4);
-        this.add.image(1000, 1500, 'montana').setScale(2);
+        this.mountainsBack = this.add.tileSprite(0,
+            this.height,
+            this.width,
+            this.cache.getImage('mountains3').height,
+            'mountains3'
+        );
+
+        // Unused?
+        //this.add.image(1000, 1000, 'fondo').setScale(4);
+        //this.add.image(1000, 1500, 'montana').setScale(2);
 
         // NOTA: Las llaves terreno_nivel1 (tileset) y terreno (layer) seasignan en Tiled
         // Creamos el mapa a traves del objeto de la configuración
