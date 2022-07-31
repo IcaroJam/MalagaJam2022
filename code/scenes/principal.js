@@ -66,7 +66,7 @@ class Principal extends Phaser.Scene {
         platforms.setCollisionByExclusion(-1, true);
 
         // Añadimos al jugador
-        this.player = this.physics.add.sprite(100, 1500, 'plychar', 5).setSize(50, 128);
+        this.player = this.physics.add.sprite(256, 1500, 'plychar', 5).setSize(50, 100);
         this.player.setBounce(0.1);
         this.player.setScale(1);
 
@@ -112,14 +112,12 @@ class Principal extends Phaser.Scene {
             if (this.player.body.onFloor()) {
                 this.player.play('walk', true);
               }
-            gameState.walking = true
         }
         else if (this.cursors.right.isDown) {
             this.player.setVelocityX(velocity);
             if (this.player.body.onFloor()) {
                 this.player.play('walk', true);
               }
-            gameState.walking = true
         }
         else {
             this.player.setVelocityX(0);
@@ -127,7 +125,7 @@ class Principal extends Phaser.Scene {
                 this.player.play('idle', true);
             }
             gameState.walking = false;
-            gameState.sfx.steps.stop();
+            // gameState.sfx.steps.stop();
         }
 
         if (this.cursors.up.isDown && this.player.body.onFloor()) {
@@ -135,13 +133,13 @@ class Principal extends Phaser.Scene {
             this.player.anims.play('jump', true);
         }
 
-        if (gameState.walking && !gameState.sfx.steps.isPlaying && this.player.body.onFloor()) {
-            gameState.sfx.steps.play();
-        }
+        // if (!gameState.sfx.steps.isPlaying && this.player.body.onFloor()) {
+        //     gameState.sfx.steps.play();
+        // }
 
-        if(!this.player.body.onFloor()){
-            gameState.sfx.steps.stop();
-        }
+        // if(!this.player.body.onFloor()){
+        //     gameState.sfx.steps.stop();
+        // }
 
         if (this.player.body.velocity.x > 0) {
             this.player.setFlipX(false);
