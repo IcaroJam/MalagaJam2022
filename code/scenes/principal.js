@@ -69,7 +69,7 @@ class Principal extends Phaser.Scene {
         cliffplatform.setCollisionByExclusion(-1, true);
 
         // Añadimos al jugador
-        this.player = this.physics.add.sprite(4056, 1500, 'plychar', 5).setSize(50, 100);
+        this.player = this.physics.add.sprite(256, 1500, 'plychar', 5).setSize(50, 100);
         this.player.setBounce(0.1);
         this.player.setScale(1);
 
@@ -109,7 +109,7 @@ class Principal extends Phaser.Scene {
     }
 
     update() {
-        const velocity = 300;
+        const velocity = 320;
         if (this.cursors.left.isDown) {
             this.player.setVelocityX(-velocity);
             if (this.player.body.onFloor()) {
