@@ -24,9 +24,6 @@ class Principal extends Phaser.Scene {
         this.load.image('trees1', 'assets/Plane1Trees.png');
         this.load.image('vignette', 'assets/Vignette.png');
 
-        //Laser
-        this.load.image('laser', "assets/laser.png");
-
         // Sounds
         this.load.audio('steps', [
             'assets/audio/steps-003.ogg',
@@ -79,10 +76,6 @@ class Principal extends Phaser.Scene {
         this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.player, platforms);
 
-        // Laser
-        this.laserGroup = new LaserGroup(this);
-		this.addEvents();
-
         // Animación para andar
         this.anims.create({
             key: 'walk',
@@ -99,7 +92,7 @@ class Principal extends Phaser.Scene {
         });
 
         // Vignette setup.
-        var vign = this.add.image(0, 0, 'vignette').setOrigin(0, 0).setScrollFactor(0);
+        var vign = this.add.image(0, -200, 'vignette').setOrigin(0, 0).setScrollFactor(0);
         vign.alpha = 0.5;
 
         // La camera sigue al jugador
@@ -127,7 +120,7 @@ class Principal extends Phaser.Scene {
         }
 
         if (this.cursors.up.isDown && this.player.body.onFloor()) {
-            this.player.setVelocityY(-600);
+            this.player.setVelocityY(-1200);
         }
 
         if (this.cursors.up.isDown){
@@ -142,66 +135,6 @@ class Principal extends Phaser.Scene {
             gameState.sfx.steps.stop();
         }
     }
-
-    addEvents() {
-	    this.input.on('pointerdown', pointer => {
-            this.shootLaser();
-        });
-    }
-
-    shootLaser() {
-        this.laserGroup.fireLaser(this.player.x, this.player.y - 20);
-    }
 }
 
 export default Principal;
-
-class LaserGroup extends Phaser.Physics.Arcade.Group
-{
-	constructor(scene) {
-		// Call the super constructor, passing in a world and a scene
-		super(scene.physics.world, scene);
-
-		// Initialize the group
-		this.createMultiple({
-			classType: Laser, // This is the class we create just below
-			frameQuantity: 30, // Create 30 instances in the pool
-			active: false,
-			visible: false,
-			key: 'laser'
-		})
-	}
-
-    fireLaser(x, y) {
-		// Get the first available sprite in the group
-		const laser = this.getFirstDead(false);
-		if (laser) {
-			laser.fire(x, y);
-		}
-	}
-
-}
-
-class Laser extends Phaser.Physics.Arcade.Sprite {
-	constructor(scene, x, y) {
-		super(scene, x, y, 'laser');
-	}
-
-    preUpdate(time, delta) {
-		super.preUpdate(time, delta);
- 
-		if (this.x <= 0) {
-			this.setActive(false);
-			this.setVisible(false);
-		}
-	}
-
-    fire(x, y) {
-		this.body.reset(x, y);
- 
-		this.setActive(true);
-		this.setVisible(true);
- 
-		this.setVelocityX(900);
-	}
-}
