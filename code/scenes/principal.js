@@ -12,8 +12,7 @@ class Principal extends Phaser.Scene {
         // Tileset inicial de Nestor
         this.load.image('tiles', 'assets/BaseTileMap.png');
         // Tileset de prueba
-        this.load.spritesheet("characters", "assets/main_walking.png", { frameWidth: 128, frameHeight: 128 });
-        this.load.spritesheet("jump", "assets/main_jumping.png", { frameWidth: 128, frameHeight: 128 });
+        this.load.spritesheet("plychar", "assets/MainCharTile.png", { frameWidth: 128, frameHeight: 128 });
         // Mapa en formato JSON creado con Tiled
         this.load.tilemapTiledJSON('map', 'assets/nivel1.json');
         // Fondos
@@ -67,9 +66,8 @@ class Principal extends Phaser.Scene {
         platforms.setCollisionByExclusion(-1, true);
 
         // Añadimos al jugador
-        this.player = this.physics.add.sprite(100, 1500, 'characters', 5).setSize(50, 128);
+        this.player = this.physics.add.sprite(100, 1500, 'plychar', 5).setSize(50, 128);
         this.player.setBounce(0.1);
-        this.player.body.setGravityY(300)
         this.player.setScale(1);
 
         // Colisiones del jugador
@@ -79,14 +77,21 @@ class Principal extends Phaser.Scene {
         // Animación para andar
         this.anims.create({
             key: 'walk',
-            frames: this.anims.generateFrameNumbers('characters', { start: 0, end: 5 }),
+            frames: this.anims.generateFrameNumbers('plychar', { start: 0, end: 5 }),
             frameRate: 10,
             repeat: -1
         });
 
         this.anims.create({
             key: 'jump',
-            frames: this.anims.generateFrameNumbers('jump', { start: 3, end: 3}),
+            frames: this.anims.generateFrameNumbers('plychar', { start: 8, end: 9}),
+            frameRate: 10,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'idle',
+            frames: this.anims.generateFrameNumbers('plychar', { start: 5, end: 5}),
             frameRate: 10,
             repeat: 0
         });
@@ -104,27 +109,30 @@ class Principal extends Phaser.Scene {
         const velocity = 300;
         if (this.cursors.left.isDown) {
             this.player.setVelocityX(-velocity);
-            this.player.anims.play('walk', true);
+            if (this.player.body.onFloor()) {
+                this.player.play('walk', true);
+              }
             gameState.walking = true
         }
         else if (this.cursors.right.isDown) {
             this.player.setVelocityX(velocity);
-            this.player.anims.play('walk', true);
+            if (this.player.body.onFloor()) {
+                this.player.play('walk', true);
+              }
             gameState.walking = true
         }
         else {
             this.player.setVelocityX(0);
-            this.player.anims.stop('walk');
+            if(this.player.body.onFloor()){
+                this.player.play('idle', true);
+            }
             gameState.walking = false;
             gameState.sfx.steps.stop();
         }
 
         if (this.cursors.up.isDown && this.player.body.onFloor()) {
             this.player.setVelocityY(-1200);
-        }
-
-        if (this.cursors.up.isDown){
-            this.player.anims.play('jump');
+            this.player.anims.play('jump', true);
         }
 
         if (gameState.walking && !gameState.sfx.steps.isPlaying && this.player.body.onFloor()) {
@@ -134,6 +142,12 @@ class Principal extends Phaser.Scene {
         if(!this.player.body.onFloor()){
             gameState.sfx.steps.stop();
         }
+
+        if (this.player.body.velocity.x > 0) {
+            this.player.setFlipX(false);
+          } else if (this.player.body.velocity.x < 0) {
+            this.player.setFlipX(true);
+          }
     }
 }
 

@@ -32,7 +32,7 @@ var config = {
     width: 1280,
     height: 1024,
     backgroundColor: '#202426',
-    scene: [    Principal ],
+    scene: [ Principal ],
     scale: {
         mode: Phaser.Scale.FIT,
         parent: 'canvas',
