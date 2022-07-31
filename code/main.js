@@ -32,7 +32,7 @@ var config = {
     width: 1280,
     height: 1024,
     backgroundColor: '#202426',
-    scene: [    Principal ],
+    scene: [ Principal ],
     scale: {
         mode: Phaser.Scale.FIT,
         parent: 'canvas',
@@ -43,7 +43,7 @@ var config = {
     physics: {
         default: "arcade",
         arcade:{
-            gravity:{y:300}
+            gravity:{y:2500}
         }
     },
     pixelArt: true,
