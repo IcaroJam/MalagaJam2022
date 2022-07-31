@@ -56,23 +56,27 @@ class Principal extends Phaser.Scene {
 
         // Le asignamos su tileset para que lo pueda dibujar
         const tileset = map.addTilesetImage('BaseTiles', 'tiles');
+        const clifftileset = map.addTilesetImage('FinalCliff', 'clifftiles');
 
         // Creamos una capa cargada desde la config del map
         const platforms = map.createStaticLayer('TileLayer', tileset, 0, 800);
+        const cliffplatform = map.createStaticLayer('CliffLayer', clifftileset, 0, 800);
         platforms.setScale(1);
+        cliffplatform.setScale(1);
 
         // Importante para la colision
         platforms.setCollisionByExclusion(-1, true);
+        cliffplatform.setCollisionByExclusion(-1, true);
 
         // Añadimos al jugador
-        this.player = this.physics.add.sprite(256, 1500, 'plychar', 5).setSize(50, 100);
+        this.player = this.physics.add.sprite(9256, 1500, 'plychar', 5).setSize(50, 100);
         this.player.setBounce(0.1);
         this.player.setScale(1);
-        this.player.setMaxVelocity(350, 6000);
 
         // Colisiones del jugador
         this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.player, platforms);
+        this.physics.add.collider(this.player, cliffplatform);
 
         // Animación para andar
         this.anims.create({
