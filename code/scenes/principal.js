@@ -73,7 +73,6 @@ class Principal extends Phaser.Scene {
         // Colisiones del jugador
         this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.player, platforms);
-        this.physics.add.collider(this.player, cliffplatform);
 
         // Animación para andar
         this.anims.create({

@@ -40,7 +40,7 @@
         {
          "columns":4,
          "firstgid":1,
-         "image":"sprites\/PNGs\/tiles\/BaseTileMap.png",
+         "image":"BaseTileMap.png",
          "imageheight":256,
          "imagewidth":512,
          "margin":0,
@@ -53,7 +53,7 @@
         {
          "columns":6,
          "firstgid":9,
-         "image":"sprites\/PNGs\/tiles\/FinalCliff.png",
+         "image":"FinalCliff.png",
          "imageheight":512,
          "imagewidth":768,
          "margin":0,
