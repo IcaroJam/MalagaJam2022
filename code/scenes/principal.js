@@ -47,7 +47,7 @@ class Principal extends Phaser.Scene {
         this.add.image(0, 900, 'mountains2').setOrigin(0, 0.9).setScrollFactor(0.2);
         this.add.image(0, 900, 'mountains1').setOrigin(0, 0.7).setScrollFactor(0.3);
         this.add.image(0, 1120, 'trees2').setOrigin(0, 0.5).setScrollFactor(0.6);
-        this.add.image(0, 1420, 'trees1').setOrigin(0, 0.3).setScrollFactor(1);
+        this.add.image(0, 1800, 'trees1').setOrigin(0, 0.5).setScrollFactor(1);
         
 
         // NOTA: Las llaves terreno_nivel1 (tileset) y terreno (layer) seasignan en Tiled
@@ -59,8 +59,8 @@ class Principal extends Phaser.Scene {
         const clifftileset = map.addTilesetImage('FinalCliff', 'clifftiles');
 
         // Creamos una capa cargada desde la config del map
-        const platforms = map.createStaticLayer('TileLayer', tileset, 0, 800);
-        const cliffplatform = map.createStaticLayer('CliffLayer', clifftileset, 0, 800);
+        const platforms = map.createLayer('TileLayer', tileset, 0, 800);
+        const cliffplatform = map.createLayer('CliffLayer', clifftileset, 0, 800);
         platforms.setScale(1);
         cliffplatform.setScale(1);
 
