@@ -47,8 +47,10 @@ class Principal extends Phaser.Scene {
         this.add.image(0, 900, 'mountains2').setOrigin(0, 0.9).setScrollFactor(0.2);
         this.add.image(0, 900, 'mountains1').setOrigin(0, 0.7).setScrollFactor(0.3);
         this.add.image(0, 1120, 'trees2').setOrigin(0, 0.5).setScrollFactor(0.6);
-        this.add.tileSprite(0, 1400, 12560, 512, 'treetile').setOrigin(0, 0.25).setScrollFactor(1)
+        this.add.tileSprite(0, 1400, 12560, 512, 'treetile').setOrigin(0, 0.25).setScrollFactor(1);
         
+        // Fill the floor with color
+        this.add.rectangle(0, 2000, 24560, 512, 0x202426);
 
         // NOTA: Las llaves terreno_nivel1 (tileset) y terreno (layer) seasignan en Tiled
         // Creamos el mapa a traves del objeto de la configuración
@@ -72,7 +74,7 @@ class Principal extends Phaser.Scene {
         this.player = this.physics.add.sprite(256, 1500, 'plychar', 5).setSize(50, 100);
         this.player.setBounce(0.1);
         this.player.setScale(1);
-        this.player.setMaxVelocity(400, 2400);
+        this.player.setMaxVelocity(400, 2000);
 
         // Colisiones del jugador
         this.player.setCollideWorldBounds(true);

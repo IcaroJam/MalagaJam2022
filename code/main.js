@@ -31,7 +31,10 @@ var config = {
     parent: 'canvas',
     width: 1280,
     height: 1024,
-    backgroundColor: '#202426',
+    // MountainPlane1 Colour
+    backgroundColor: '#2c3638',
+    // TreePlane1 Colour
+    // backgroundColor: '#202426',
     scene: [ Principal ],
     scale: {
         mode: Phaser.Scale.FIT,
