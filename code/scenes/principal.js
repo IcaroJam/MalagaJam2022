@@ -21,7 +21,7 @@ class Principal extends Phaser.Scene {
         this.load.image('mountains2', 'assets/Plane2Mountains.png');
         this.load.image('mountains1', 'assets/Plane1Mountains.png');
         this.load.image('trees2', 'assets/Plane2Trees.png');
-        this.load.image('trees1', 'assets/Plane1Trees.png');
+        this.load.image('treetile', 'assets/Plane1TreesSHORT.png');
         this.load.image('vignette', 'assets/Vignette.png');
 
         // Sounds
@@ -47,7 +47,7 @@ class Principal extends Phaser.Scene {
         this.add.image(0, 900, 'mountains2').setOrigin(0, 0.9).setScrollFactor(0.2);
         this.add.image(0, 900, 'mountains1').setOrigin(0, 0.7).setScrollFactor(0.3);
         this.add.image(0, 1120, 'trees2').setOrigin(0, 0.5).setScrollFactor(0.6);
-        this.add.image(0, 1800, 'trees1').setOrigin(0, 0.5).setScrollFactor(1);
+        this.add.tileSprite(0, 1400, 12560, 512, 'treetile').setOrigin(0, 0.25).setScrollFactor(1)
         
 
         // NOTA: Las llaves terreno_nivel1 (tileset) y terreno (layer) seasignan en Tiled
@@ -72,6 +72,7 @@ class Principal extends Phaser.Scene {
         this.player = this.physics.add.sprite(256, 1500, 'plychar', 5).setSize(50, 100);
         this.player.setBounce(0.1);
         this.player.setScale(1);
+        this.player.setMaxVelocity(400, 2400);
 
         // Colisiones del jugador
         this.player.setCollideWorldBounds(true);
