@@ -34,10 +34,8 @@ class Principal extends Phaser.Scene {
         // Asignacion de los cursores direccion
         this.cursors = this.input.keyboard.createCursorKeys();
 
-        const zoom = 2;
-        // Reajuste de las camaras y el mundo para el zoom * 2
-        this.cameras.main.setBounds(0, 0, 7680 * zoom, 1024 * zoom);
-        this.physics.world.setBounds(0, 0, 7680 * zoom, 1024 * zoom);
+        this.cameras.main.setBounds(0, 0, 10880, 2048);
+        this.physics.world.setBounds(0, 0, 10880, 2048);
 
         // Sound
         // gameState.sfx = {};
