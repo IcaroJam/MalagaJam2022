@@ -23,6 +23,7 @@ class Principal extends Phaser.Scene {
         this.load.image('trees2', 'assets/Plane2Trees.png');
         this.load.image('treetile', 'assets/Plane1TreesSHORT.png');
         this.load.image('vignette', 'assets/Vignette.png');
+		this.load.image('sky', 'assets/Horizon.png');
 
         // Sounds
         this.load.audio('steps', [
@@ -41,6 +42,7 @@ class Principal extends Phaser.Scene {
         // gameState.sfx = {};
         // gameState.sfx.steps = this.sound.add('steps', { loop: true });
 
+		this.add.image(-128, 0, 'sky').setOrigin(0, 0.4).setScrollFactor(1, 0);
         this.add.image(0, 720, 'mountains3').setOrigin(0, 1).setScrollFactor(0.1);
         this.add.image(0, 900, 'mountains2').setOrigin(0, 0.9).setScrollFactor(0.2);
         this.add.image(0, 900, 'mountains1').setOrigin(0, 0.7).setScrollFactor(0.3);
@@ -69,7 +71,7 @@ class Principal extends Phaser.Scene {
         cliffplatform.setCollisionByExclusion(-1, true);
 
         // Añadimos al jugador
-        this.player = this.physics.add.sprite(256, 1500, 'plychar', 5).setSize(50, 100);
+        this.player = this.physics.add.sprite(256, 1000, 'plychar', 5).setSize(50, 100);
         this.player.setBounce(0.1);
         this.player.setScale(1);
         this.player.setMaxVelocity(400, 2000);
